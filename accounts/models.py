@@ -11,7 +11,7 @@ class CustomUser(AbstractUser):
         validators=[validate_phone_number],
         verbose_name='Phone number'
     )
-    address = models.ForeignKey('Address', on_delete=models.CASCADE, verbose_name='Address')
+    address = models.ForeignKey('Address', on_delete=models.CASCADE, verbose_name='Address', null=True, blank=True)
 
     class Meta:
         verbose_name = 'User'
