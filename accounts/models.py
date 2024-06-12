@@ -9,7 +9,9 @@ class CustomUser(AbstractUser):
         max_length=20,
         unique=True,
         validators=[validate_phone_number],
-        verbose_name='Phone number'
+        verbose_name='Phone number',
+        null=True,
+        blank=True
     )
     address = models.ForeignKey('Address', on_delete=models.CASCADE, verbose_name='Address', null=True, blank=True)
 
