@@ -4,13 +4,6 @@ from accounts import views
 
 urlpatterns = [
     path('register/', views.RegisterView.as_view(), name='register'),
+    path('login/', views.LoginView.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
 ]
-
-
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-#     path('', TemplateView.as_view(template_name='landing_page.html'), name='landing_page'),
-#     # j.w. zakładka 'kontakt' oraz 'o stronie'
-#     path('accounts/', include('accounts.urls')),
-#     path('shop/', include('shop.urls')),
-# ]
