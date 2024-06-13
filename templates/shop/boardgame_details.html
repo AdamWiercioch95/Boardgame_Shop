@@ -1,9 +1,88 @@
 {% extends "top_header.html" %}
 {%  block content %}
+
+{#    <div class="container">#}
+{#        <h2 class="text-center">{{ boardgame.name }}</h2>#}
+{#        <table>#}
+{#            <th>{{ boardgame.min_players }} - {{ boardgame.max_players }} players</th>#}
+{#            <th>{{ boardgame.min_game_time }} - {{ boardgame.max_game_time }} minutes</th>#}
+{#            <th>{{ boardgame.avg_rating }} rating</th>#}
+{#        </table>#}
+{#    </div>#}
     
-    <h2>{{ boardgame.name }}</h2>
-    <p>{{ boardgame.description }}</p>
-    <p>{{ boardgame.price }}</p>
-    <p>{{ boardgame.avg_rating }}</p>
-    
+{#    <div class="container">#}
+{#    <h2 class="text-center">{{ boardgame.name }}</h2>#}
+{#    <div class="table-responsive">#}
+{#        <table class="table table-bordered table-striped">#}
+{#            <thead>#}
+{#                <tr>#}
+{#                    <th class="text-center col-auto">{{ boardgame.min_players }} - {{ boardgame.max_players }} players</th>#}
+{#                    <th class="text-center col-auto">{{ boardgame.min_game_time }} - {{ boardgame.max_game_time }} minutes</th>#}
+{#                    <th class="text-center col-auto">{{ boardgame.avg_rating }} rating</th>#}
+{#                </tr>#}
+{#            </thead>#}
+{#            <tbody>#}
+{#                <!-- Tu możesz dodać więcej wierszy lub informacji -->#}
+{#            </tbody>#}
+{#        </table>#}
+{#    </div>#}
+{#</div>#}
+    <div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title text-center">{{ boardgame.name }}</h2>
+            
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-3">Players</th>
+                            <th class="text-center col-3">Game Time</th>
+                            <th class="text-center col-3">Age</th>
+                            <th class="text-center col-3">Rating</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">{{ boardgame.min_players }} - {{ boardgame.max_players }}</th>
+                            {% if boardgame.max_game_time %}
+                                <th class="text-center">{{ boardgame.min_game_time }} - {{ boardgame.max_game_time }}</th>
+                            {% else %}
+                                <th class="text-center">{{ boardgame.min_game_time }}+</th>
+                            {% endif %}
+                            <th class="text-center">{{ boardgame.min_players_age }}+</th>
+                            <th class="text-center">{{ boardgame.avg_rating }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Możesz dodać więcej wierszy lub informacji -->
+                    </tbody>
+                </table>
+            </div>
+            <h5>Description</h5>
+            <p class="card-text">{{ boardgame.description }}</p>
+            <div class="mt-4">
+                <div>
+                    <h5>Categories</h5>
+                    <p class="card-text"> 
+                        {% for category in boardgame.categories.all %}
+                            {{ category }} {% if not forloop.last %}, {% endif %} 
+                        {% endfor %}
+                    </p>
+                </div>
+                <div>
+                    <h5>Publisher</h5>
+                    <p class="card-text">{{ boardgame.publisher }}</p>
+                </div>
+                <div>
+                    <h5>Price</h5>
+                    <p class="card-text">{{ boardgame.price }}</p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a href="#" class="btn btn-success ml-auto">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {%  endblock %}
+
+

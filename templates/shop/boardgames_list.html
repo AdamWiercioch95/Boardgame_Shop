@@ -1,19 +1,73 @@
 {% extends "top_header.html" %}
 {%  block content %}
     
-    <h2>Boardgames</h2>
-    
-    <a href="{% url 'boardgame_add' %}">Add Boardgame</a><br>
+{#    <h2 class="container mt-4">Boardgames</h2>#}
+{#    #}
+{#    <div class="container">#}
+{#        <a href="{% url 'boardgame_add'%}" class="btn btn-primary mb-3">Add Boardgame</a><br>#}
+{#        <ul>#}
+{#            {% for boardgame in object_list %}#}
+{#                <li>#}
+{#                    <a href="{% url 'boardgame_details' boardgame.pk %}">{{ boardgame.name }}</a>#}
+{#                    <a href="{% url 'boardgame_update' boardgame.pk %}" class="btn btn-sm btn-secondary">Edit</a>#}
+{#                    <a href="{% url 'boardgame_delete' boardgame.pk %}" class="btn btn-sm btn-danger">Delete</a>#}
+{#                </li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+    {#    </div>#}
+    {#    ------------------------------------------------------------------------------------------------#}
+    {#    <div class="container mt-4">#}
+{#    <h2 class="text-center">Boardgames</h2>#}
+{##}
+{#    <div class="text-center mb-4">#}
+{#        <a href="{% url 'boardgame_add' %}" class="btn btn-primary">Add Boardgame</a>#}
+{#    </div>#}
+{##}
+{#    <div class="row">#}
+{#        {% for boardgame in object_list %}#}
+{#            <div class="col-md-4 mb-4">#}
+{#                <div class="card">#}
+{#                    <div class="card-body">#}
+{#                        <h5 class="card-title">{{ boardgame.name }}</h5>#}
+{#                        <p class="card-text">Some description or details about the boardgame.</p>#}
+{#                        <a href="{% url 'boardgame_details' boardgame.pk %}" class="btn btn-primary">View Details</a>#}
+{#                        <a href="{% url 'boardgame_update' boardgame.pk %}" class="btn btn-secondary">Edit</a>#}
+{#                        <a href="{% url 'boardgame_delete' boardgame.pk %}" class="btn btn-danger">Delete</a>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#</div>#}
+        {#    ------------------------------------------------------------------------------------------------#}
+    <div class="container mt-4">
+    <h2 class="text-center">SEARCH FIELD</h2>
+{#    <p class="text-center">Planszówki strategiczne: szeroka kategoria, w której ścierają się ze sobą wymagające gry ekonomiczne oraz pełne wyzwań gry wojenne.</p>#}
 
-    
-    <ul>
+    <div class="text-center mb-4">
+        <a href="{% url 'boardgame_add' %}" class="btn btn-primary">Add boardgame</a>
+    </div>
+
+    <div class="row">
         {% for boardgame in object_list %}
-            <li>
-                <a href="{% url 'boardgame_details' boardgame.pk %}">{{ boardgame.name }}</a>
-                <a href="{% url 'boardgame_update' boardgame.pk %}">Edit</a>
-                <a href="{% url 'boardgame_delete' boardgame.pk %}">Delete</a>
-            </li>
+            <div class="col-md-12 mb-4">
+                <div class="card flex-row">
+{#                    <img class="card-img-left example-card-img-responsive" src="{% static 'path/to/image.jpg' %}" alt="Boardgame image">#}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ boardgame.name }}</h5>
+                        <p class="card-text">{{ boardgame.price }} PLN</p>
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-start gap-2">
+                                <a href="{% url 'boardgame_details' boardgame.pk %}" class="btn btn-primary">Details</a>
+                                <a href="{% url 'boardgame_update' boardgame.pk %}" class="btn btn-secondary">Edit</a>
+                                <a href="{% url 'boardgame_delete' boardgame.pk %}" class="btn btn-danger">Delete</a>
+                                <a href="#" class="btn btn-success ml-auto">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
-    
+    </div>
+</div>
 {%  endblock %}
