@@ -1,0 +1,19 @@
+{% extends "top_header.html" %}
+{%  block content %}
+    
+    <h2>Boardgames</h2>
+    
+    <a href="{% url 'boardgame_add' %}">Add Boardgame</a><br>
+
+    
+    <ul>
+        {% for boardgame in object_list %}
+            <li>
+                <a href="{% url 'boardgame_details' boardgame.pk %}">{{ boardgame.name }}</a>
+                <a href="{% url 'boardgame_update' boardgame.pk %}">Edit</a>
+                <a href="{% url 'boardgame_delete' boardgame.pk %}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+    
+{%  endblock %}

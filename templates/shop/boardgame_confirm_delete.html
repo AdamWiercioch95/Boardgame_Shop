@@ -1,0 +1,11 @@
+{% extends "top_header.html" %}
+
+{% block content %}
+  <h2>{{ title }}</h2>
+  <p>Are you sure you want to delete "{{ object.name }}"?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirm</button>
+    <a href="{% url 'boardgames_list' %}">Cancel</a>
+  </form>
+{% endblock %}
