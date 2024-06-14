@@ -1,0 +1,30 @@
+{% extends 'top_header.html' %}
+{% block content %}
+    
+    <table>
+    <tr>
+            <th>Boardgame</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+    </tr>
+
+    {% for item in cart.cartboardgame_set.all %}
+        <tr>
+            <th>{{ item.boardgame.name }}</th>
+            <th>{{ item.quantity }}</th>
+            <th>{{ item.boardgame.price }}</th>
+            <th>{{ item.total }}</th>
+        </tr>
+    {% endfor %}
+
+    </table>
+    <p>Total: {{ cart.total }}</p>
+
+{#    <form action="{% url 'make_order' %}" method="post">#}
+{#        {% csrf_token %}#}
+{#        <input type="hidden" name="action" value="submit_order">#}
+{#        <button type="submit">Make order</button>#}
+{#    </form>#}
+    
+{% endblock %}

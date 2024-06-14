@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from shop.models import Boardgame
+from shop.models import Boardgame, Cart, CartBoardgame
 
 
 class BoardgameListView(ListView):
@@ -52,3 +53,25 @@ class BoardgameDeleteView(DeleteView):
         context['title'] = 'Delete Boardgame'
         return context
 
+
+class CartListView(View):
+    def get(self, request):
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        return render(request, 'shop/cart_list.html', {'cart': cart})
+    # model = Cart
+    # template_name = "shop/cart_list.html"
+
+
+class AddBoardgameToCartView(View):
+    def get(self, request, boardgame_pk):
+        boardgame = Boardgame.objects.get(pk=boardgame_pk)
+        cart, created = Cart.objects.get_or_create(user=request.user)
+
+        try:
+            cart_item = CartBoardgame.objects.get(boardgame=boardgame, cart=cart)
+            cart_item.quantity += 1
+            cart_item.save()
+        except CartBoardgame.DoesNotExist:
+            cart.boardgames.add(boardgame)
+
+        return redirect('boardgames_list')

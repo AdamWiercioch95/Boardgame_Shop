@@ -61,7 +61,7 @@
                                 <a href="{% url 'boardgame_details' boardgame.pk %}" class="btn btn-primary">Details</a>
                                 <a href="{% url 'boardgame_update' boardgame.pk %}" class="btn btn-secondary">Edit</a>
                                 <a href="{% url 'boardgame_delete' boardgame.pk %}" class="btn btn-danger">Delete</a>
-                                <a href="#" class="btn btn-success ml-auto">Add to Cart</a>
+                                <a href="{% url 'add_boardgame_to_cart' boardgame.pk %}" class="btn btn-success ml-auto">Add to Cart</a>
                             </div>
                         </div>
                     </div>

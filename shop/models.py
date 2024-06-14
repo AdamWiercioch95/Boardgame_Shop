@@ -1,6 +1,6 @@
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Avg
+from django.db.models import Avg, Sum, F
 
 from accounts.models import CustomUser
 
@@ -26,8 +26,7 @@ class Boardgame(models.Model):
         ordering = ['name']
 
     def avg_rating(self):
-        avg = self.review_set.aggregate(Avg('rating'))['rating__avg']
-        return avg if avg is not None else 0.0
+        return self.review_set.aggregate(Avg('rating'))['rating__avg'] or 0.0
 
     def __str__(self):
         return self.name
@@ -76,3 +75,26 @@ class Review(models.Model):
 
     def __str__(self):
         return f'{self.boardgame} - {self.rating}'
+
+
+class CartBoardgame(models.Model):
+    boardgame = models.ForeignKey(Boardgame, on_delete=models.CASCADE)
+    cart = models.ForeignKey('Cart', on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+
+    def total(self):
+        return self.quantity * self.boardgame.price
+
+    def __str__(self):
+        return f'{self.boardgame} - {self.quantity}'
+
+
+class Cart(models.Model):
+    boardgames = models.ManyToManyField(Boardgame, through='CartBoardgame')
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+
+    def total(self):
+        result = self.cartboardgame_set.aggregate(
+            total=Sum(F('quantity') * F('boardgame__price'))
+        )['total'] or 0
+        return round(result, 2)
