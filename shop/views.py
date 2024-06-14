@@ -58,8 +58,6 @@ class CartListView(View):
     def get(self, request):
         cart, created = Cart.objects.get_or_create(user=request.user)
         return render(request, 'shop/cart_list.html', {'cart': cart})
-    # model = Cart
-    # template_name = "shop/cart_list.html"
 
 
 class AddBoardgameToCartView(View):
@@ -75,3 +73,19 @@ class AddBoardgameToCartView(View):
             cart.boardgames.add(boardgame)
 
         return redirect('boardgames_list')
+
+
+class DeleteBoardgameFromCartView(View):
+    def get(self, request, boardgame_pk):
+        boardgame = Boardgame.objects.get(pk=boardgame_pk)
+        cart, created = Cart.objects.get_or_create(user=request.user)
+
+        cart_item = CartBoardgame.objects.get(boardgame=boardgame, cart=cart)
+        if cart_item.quantity > 1:
+            cart_item.quantity -= 1
+            cart_item.save()
+        else:
+            cart_item.delete()
+
+        return redirect('cart_list')
+

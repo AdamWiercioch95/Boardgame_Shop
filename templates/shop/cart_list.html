@@ -1,6 +1,6 @@
 {% extends 'top_header.html' %}
 {% block content %}
-    
+
     <table>
     <tr>
             <th>Boardgame</th>
@@ -15,6 +15,7 @@
             <th>{{ item.quantity }}</th>
             <th>{{ item.boardgame.price }}</th>
             <th>{{ item.total }}</th>
+            <th><a href="{% url 'delete_boardgame_from_cart' item.boardgame.pk %}" class="btn btn-danger ml-auto">Delete</a></th>
         </tr>
     {% endfor %}
 
@@ -26,5 +27,5 @@
 {#        <input type="hidden" name="action" value="submit_order">#}
 {#        <button type="submit">Make order</button>#}
 {#    </form>#}
-    
+
 {% endblock %}

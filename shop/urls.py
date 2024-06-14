@@ -9,5 +9,8 @@ urlpatterns = [
     path('boardgame_update/<int:pk>', views.BoardgameUpdateView.as_view(), name='boardgame_update'),
     path('boardgame_delete/<int:pk>', views.BoardgameDeleteView.as_view(), name='boardgame_delete'),
     path('cart_list/', views.CartListView.as_view(), name='cart_list'),
-    path('add_boardgame_to_cart/<int:boardgame_pk>/', views.AddBoardgameToCartView.as_view(), name='add_boardgame_to_cart'),
+    path('add_boardgame_to_cart/<int:boardgame_pk>/', views.AddBoardgameToCartView.as_view(),
+         name='add_boardgame_to_cart'),
+    path('delete_boardgame_from_cart/<int:boardgame_pk>/', views.DeleteBoardgameFromCartView.as_view(),
+         name='delete_boardgame_from_cart'),
 ]
