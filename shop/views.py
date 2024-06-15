@@ -1,10 +1,11 @@
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from shop.models import Boardgame, Cart, CartBoardgame, Order, OrderBoardgame
+from shop.models import Boardgame, Cart, CartBoardgame, Order, OrderBoardgame, Review
 
 
 class BoardgameListView(ListView):
@@ -15,6 +16,17 @@ class BoardgameListView(ListView):
 class BoardgameDetailView(DetailView):
     model = Boardgame
     template_name = "shop/boardgame_details.html"
+
+    # def is_reviewed(self):
+    #     return Review.objects.filter(user=self.request.user, boardgame=self.object.boardgame).exists()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # if self.is_reviewed:
+        #     context['is_reviewed'] = True
+        boardgame = self.get_object()
+        context['is_reviewed'] = Review.objects.filter(user=self.request.user, boardgame=boardgame).exists()
+        return context
 
 
 class BoardgameAddView(UserPassesTestMixin, CreateView):
@@ -129,3 +141,31 @@ class OrdersListView(LoginRequiredMixin, ListView):
 class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = 'shop/order_detail.html'
+
+
+class ReviewAddView(LoginRequiredMixin, CreateView):
+    model = Review
+    fields = ['rating', 'comment']
+    template_name = 'shop/form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Add Review'
+        return context
+
+    def form_valid(self, form):
+        boardgame_pk = self.kwargs['boardgame_pk']
+        boardgame = Boardgame.objects.get(pk=boardgame_pk)
+
+        if Review.objects.filter(user=self.request.user, boardgame=boardgame).exists():
+            raise IntegrityError("You have already added review for this game.")
+
+        form.instance.boardgame = boardgame
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('boardgame_details', kwargs={'pk': self.kwargs['boardgame_pk']})
+
+    def test_func(self):
+        return self.request.user.is_authenticated

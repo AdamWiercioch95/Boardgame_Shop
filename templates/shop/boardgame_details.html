@@ -1,32 +1,6 @@
 {% extends "top_header.html" %}
 {%  block content %}
-
-{#    <div class="container">#}
-{#        <h2 class="text-center">{{ boardgame.name }}</h2>#}
-{#        <table>#}
-{#            <th>{{ boardgame.min_players }} - {{ boardgame.max_players }} players</th>#}
-{#            <th>{{ boardgame.min_game_time }} - {{ boardgame.max_game_time }} minutes</th>#}
-{#            <th>{{ boardgame.avg_rating }} rating</th>#}
-{#        </table>#}
-{#    </div>#}
     
-{#    <div class="container">#}
-{#    <h2 class="text-center">{{ boardgame.name }}</h2>#}
-{#    <div class="table-responsive">#}
-{#        <table class="table table-bordered table-striped">#}
-{#            <thead>#}
-{#                <tr>#}
-{#                    <th class="text-center col-auto">{{ boardgame.min_players }} - {{ boardgame.max_players }} players</th>#}
-{#                    <th class="text-center col-auto">{{ boardgame.min_game_time }} - {{ boardgame.max_game_time }} minutes</th>#}
-{#                    <th class="text-center col-auto">{{ boardgame.avg_rating }} rating</th>#}
-{#                </tr>#}
-{#            </thead>#}
-{#            <tbody>#}
-{#                <!-- Tu możesz dodać więcej wierszy lub informacji -->#}
-{#            </tbody>#}
-{#        </table>#}
-{#    </div>#}
-{#</div>#}
     <div class="container">
     <div class="card">
         <div class="card-body">
@@ -76,7 +50,16 @@
                     <h5>Price</h5>
                     <p class="card-text">{{ boardgame.price }}</p>
                 </div>
+                <br>
                 <div class="d-flex justify-content-between">
+                    {% if not is_reviewed %}
+                        <a href="{% url 'review_add' boardgame.pk %}" class="btn btn-primary mr-auto">Add Review</a>
+                    {% else %}
+                        <div>
+                            <a href="#" class="btn btn-secondary mr-auto">Update Review</a>
+                            <a href="#" class="btn btn-danger mr-auto">Delete Review</a>
+                        </div>
+                    {% endif %}
                     <a href="{% url 'add_boardgame_to_cart' boardgame.pk %}" class="btn btn-success ml-auto">Add to Cart</a>
                 </div>
             </div>

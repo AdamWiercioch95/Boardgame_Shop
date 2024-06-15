@@ -16,4 +16,5 @@ urlpatterns = [
     path('make_order/', views.MakeOrderView.as_view(), name='make_order'),
     path('orders_list/', views.OrdersListView.as_view(), name='orders_list'),
     path('order_detail/<int:pk>', views.OrderDetailView.as_view(), name='order_detail'),
+    path('review_add/<int:boardgame_pk>/', views.ReviewAddView.as_view(), name='review_add'),
 ]
