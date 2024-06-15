@@ -3,7 +3,7 @@ from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from shop.models import Boardgame, Cart, CartBoardgame
+from shop.models import Boardgame, Cart, CartBoardgame, Order, OrderBoardgame
 
 
 class BoardgameListView(ListView):
@@ -89,3 +89,33 @@ class DeleteBoardgameFromCartView(View):
 
         return redirect('cart_list')
 
+
+class MakeOrderView(View):
+    def post(self, request):
+        cart, created = Cart.objects.get_or_create(user=request.user)
+
+        if created or not cart.cartboardgame_set.all():
+            return redirect('cart_list')
+
+        order = Order.objects.create(user=request.user)
+
+        for cart_boardgame in cart.cartboardgame_set.all():
+            OrderBoardgame.objects.create(boardgame=cart_boardgame.boardgame,
+                                          order=order,
+                                          quantity=cart_boardgame.quantity)
+
+        cart.cartboardgame_set.all().delete()
+        return redirect('cart_list')
+
+
+class OrdersListView(ListView):
+    model = Order
+    template_name = 'shop/order_list.html'
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
+
+
+class OrderDetailView(DetailView):
+    model = Order
+    template_name = 'shop/order_detail.html'

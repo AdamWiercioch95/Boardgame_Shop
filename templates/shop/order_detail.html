@@ -1,0 +1,27 @@
+{% extends 'top_header.html' %}
+{% block content %}
+
+    <div class="container">
+        <h2 class="text-center">Order Details</h2>
+        <table class="table table-bordered table-hover text-center">
+        <tr>
+                <th>Boardgame</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+        </tr>
+    
+        {% for item in order.orderboardgame_set.all %}
+            <tr>
+                <th>{{ item.boardgame.name }}</th>
+                <th>{{ item.quantity }}</th>
+                <th>{{ item.boardgame.price }}</th>
+                <th>{{ item.total }}</th>
+            </tr>
+        {% endfor %}
+    
+        </table>
+        <p class="text-center">Total: {{ order.total }}</p>
+    </div>
+    
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'top_header.html' %}
+{% block content %}
+    <div class="container">
+    <h2 class="text-center">Your Orders</h2>
+        <table class="table table-bordered table-hover text-center">
+            <tr>
+                    <th>Order Id</th>
+                    <th>Price</th>
+                    <th>Date</th>
+            </tr>
+        
+            {% for item in object_list %}
+                <tr>
+                    <th><a href="{% url 'order_detail' item.pk %}">{{ item.id }}</a></th>
+                    <th>{{ item.total }}</th>
+                    <th>{{ item.date_ordered }}</th>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

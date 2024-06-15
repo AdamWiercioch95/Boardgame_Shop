@@ -183,3 +183,59 @@ header {
     background-color: #dc3545;
     border: none;
 }
+
+/* -------------------------------------------------------------------- */
+
+/* styles.css */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.table {
+    width: 100%;
+    table-layout: fixed; /* Ensures equal column width */
+}
+
+.table th, .table td {
+    text-align: center; /* Center text in the table */
+    vertical-align: middle; /* Center content vertically */
+}
+
+.delete-btn {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #dc3545;
+    border: none;
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.text-center {
+    text-align: center;
+}
+
+form {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+

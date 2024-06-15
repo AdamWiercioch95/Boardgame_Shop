@@ -85,9 +85,6 @@ class CartBoardgame(models.Model):
     def total(self):
         return self.quantity * self.boardgame.price
 
-    def __str__(self):
-        return f'{self.boardgame} - {self.quantity}'
-
 
 class Cart(models.Model):
     boardgames = models.ManyToManyField(Boardgame, through='CartBoardgame')
@@ -95,6 +92,27 @@ class Cart(models.Model):
 
     def total(self):
         result = self.cartboardgame_set.aggregate(
+            total=Sum(F('quantity') * F('boardgame__price'))
+        )['total'] or 0
+        return round(result, 2)
+
+
+class OrderBoardgame(models.Model):
+    boardgame = models.ForeignKey(Boardgame, on_delete=models.CASCADE)
+    order = models.ForeignKey('Order', on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+
+    def total(self):
+        return self.quantity * self.boardgame.price
+
+
+class Order(models.Model):
+    boardgame = models.ManyToManyField(Boardgame, through='OrderBoardgame')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    date_ordered = models.DateTimeField(auto_now_add=True)
+
+    def total(self):
+        result = self.orderboardgame_set.aggregate(
             total=Sum(F('quantity') * F('boardgame__price'))
         )['total'] or 0
         return round(result, 2)

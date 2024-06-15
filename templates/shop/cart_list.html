@@ -1,31 +1,73 @@
+{#{% extends 'top_header.html' %}#}
+{#{% block content %}#}
+{##}
+{#    <div class="container">#}
+{#        <h2 class="text-center">Your Cart</h2>#}
+{#        <table class="table table-bordered table-hover">#}
+{#        <tr>#}
+{#                <th>Boardgame</th>#}
+{#                <th>Quantity</th>#}
+{#                <th>Price</th>#}
+{#                <th>Total</th>#}
+{#        </tr>#}
+{##}
+{#        {% for item in cart.cartboardgame_set.all %}#}
+{#            <tr>#}
+{#                <th>{{ item.boardgame.name }}</th>#}
+{#                <th>{{ item.quantity }}</th>#}
+{#                <th>{{ item.boardgame.price }}</th>#}
+{#                <th>{{ item.total }}</th>#}
+{#                <th><a href="{% url 'delete_boardgame_from_cart' item.boardgame.pk %}" class="btn btn-danger ml-auto">Delete</a></th>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{##}
+{#        </table>#}
+{#        <p class="text-center">Total: {{ cart.total }}</p>#}
+{##}
+{#        <form action="{% url 'make_order' %}" method="post" class="text-center">#}
+{#            {% csrf_token %}#}
+{#            <input type="hidden" name="action" value="submit_order">#}
+{#            <button type="submit" class="btn btn-primary">Make order</button>#}
+{#        </form>#}
+{#    </div>#}
+{##}
+{#{% endblock %}#}
+
 {% extends 'top_header.html' %}
 {% block content %}
 
-    <table>
-    <tr>
-            <th>Boardgame</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Total</th>
-    </tr>
-
-    {% for item in cart.cartboardgame_set.all %}
-        <tr>
-            <th>{{ item.boardgame.name }}</th>
-            <th>{{ item.quantity }}</th>
-            <th>{{ item.boardgame.price }}</th>
-            <th>{{ item.total }}</th>
-            <th><a href="{% url 'delete_boardgame_from_cart' item.boardgame.pk %}" class="btn btn-danger ml-auto">Delete</a></th>
-        </tr>
-    {% endfor %}
-
+<div class="container">
+    <h2 class="text-center">Your Cart</h2>
+    <table class="table table-bordered table-hover text-center">
+        <thead>
+            <tr>
+                <th>Boardgame</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Delete From Cart</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart.cartboardgame_set.all %}
+                <tr>
+                    <td>{{ item.boardgame.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.boardgame.price }}</td>
+                    <td>{{ item.total }}</td>
+                    <td><a href="{% url 'delete_boardgame_from_cart' item.boardgame.pk %}" class="btn btn-danger delete-btn">Delete</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
-    <p>Total: {{ cart.total }}</p>
+    <p class="text-center">Total: {{ cart.total }}</p>
 
-{#    <form action="{% url 'make_order' %}" method="post">#}
-{#        {% csrf_token %}#}
-{#        <input type="hidden" name="action" value="submit_order">#}
-{#        <button type="submit">Make order</button>#}
-{#    </form>#}
+    <form action="{% url 'make_order' %}" method="post" class="text-center">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="submit_order">
+        <button type="submit" class="btn btn-primary">Make order</button>
+    </form>
+</div>
 
 {% endblock %}
+

@@ -13,4 +13,7 @@ urlpatterns = [
          name='add_boardgame_to_cart'),
     path('delete_boardgame_from_cart/<int:boardgame_pk>/', views.DeleteBoardgameFromCartView.as_view(),
          name='delete_boardgame_from_cart'),
+    path('make_order/', views.MakeOrderView.as_view(), name='make_order'),
+    path('orders_list/', views.OrdersListView.as_view(), name='orders_list'),
+    path('order_detail/<int:pk>', views.OrderDetailView.as_view(), name='order_detail'),
 ]
