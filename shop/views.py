@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
@@ -16,7 +17,7 @@ class BoardgameDetailView(DetailView):
     template_name = "shop/boardgame_details.html"
 
 
-class BoardgameAddView(CreateView):
+class BoardgameAddView(UserPassesTestMixin, CreateView):
     model = Boardgame
     fields = '__all__'
     template_name = "shop/form.html"
@@ -27,8 +28,11 @@ class BoardgameAddView(CreateView):
         context['title'] = 'Add Boardgame'
         return context
 
+    def test_func(self):
+        return self.request.user.is_superuser
 
-class BoardgameUpdateView(UpdateView):
+
+class BoardgameUpdateView(UserPassesTestMixin, UpdateView):
     model = Boardgame
     fields = '__all__'
     template_name = "shop/form.html"
@@ -42,8 +46,11 @@ class BoardgameUpdateView(UpdateView):
         context['title'] = 'Edit Boardgame'
         return context
 
+    def test_func(self):
+        return self.request.user.is_superuser
 
-class BoardgameDeleteView(DeleteView):
+
+class BoardgameDeleteView(UserPassesTestMixin, DeleteView):
     model = Boardgame
     template_name = 'shop/boardgame_confirm_delete.html'
     success_url = reverse_lazy('boardgames_list')
@@ -53,14 +60,17 @@ class BoardgameDeleteView(DeleteView):
         context['title'] = 'Delete Boardgame'
         return context
 
+    def test_func(self):
+        return self.request.user.is_superuser
 
-class CartListView(View):
+
+class CartListView(LoginRequiredMixin, View):
     def get(self, request):
         cart, created = Cart.objects.get_or_create(user=request.user)
         return render(request, 'shop/cart_list.html', {'cart': cart})
 
 
-class AddBoardgameToCartView(View):
+class AddBoardgameToCartView(LoginRequiredMixin, View):
     def get(self, request, boardgame_pk):
         boardgame = Boardgame.objects.get(pk=boardgame_pk)
         cart, created = Cart.objects.get_or_create(user=request.user)
@@ -75,7 +85,7 @@ class AddBoardgameToCartView(View):
         return redirect('boardgames_list')
 
 
-class DeleteBoardgameFromCartView(View):
+class DeleteBoardgameFromCartView(LoginRequiredMixin, View):
     def get(self, request, boardgame_pk):
         boardgame = Boardgame.objects.get(pk=boardgame_pk)
         cart, created = Cart.objects.get_or_create(user=request.user)
@@ -90,7 +100,7 @@ class DeleteBoardgameFromCartView(View):
         return redirect('cart_list')
 
 
-class MakeOrderView(View):
+class MakeOrderView(LoginRequiredMixin, View):
     def post(self, request):
         cart, created = Cart.objects.get_or_create(user=request.user)
 
@@ -108,7 +118,7 @@ class MakeOrderView(View):
         return redirect('cart_list')
 
 
-class OrdersListView(ListView):
+class OrdersListView(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'shop/order_list.html'
 
@@ -116,6 +126,6 @@ class OrdersListView(ListView):
         return Order.objects.filter(user=self.request.user)
 
 
-class OrderDetailView(DetailView):
+class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = 'shop/order_detail.html'

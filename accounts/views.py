@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
 
@@ -47,7 +48,7 @@ class LoginView(View):
 
             if user is not None:
                 login(request, user)
-                return redirect('landing_page')
+                return redirect('boardgames_list')
             else:
                 form.add_error(None, 'Username or password is incorrect')
 
@@ -58,7 +59,7 @@ class LoginView(View):
         return render(request, 'accounts/form.html', context)
 
 
-class LogoutView(View):
+class LogoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
         return redirect('landing_page')

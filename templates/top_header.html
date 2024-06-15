@@ -37,18 +37,22 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contact</a>
                     </li>
+                    {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cart_list' %}">Cart</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'orders_list' %}">Orders</a>
                     </li>
+                    {% endif %}
+                    {% if not user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'register' %}">Register</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
+                    {% endif %}
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="#">{{ user }}</a>

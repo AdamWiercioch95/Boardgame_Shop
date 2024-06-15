@@ -44,9 +44,11 @@
     <h2 class="text-center">SEARCH FIELD</h2>
 {#    <p class="text-center">Planszówki strategiczne: szeroka kategoria, w której ścierają się ze sobą wymagające gry ekonomiczne oraz pełne wyzwań gry wojenne.</p>#}
 
-    <div class="text-center mb-4">
-        <a href="{% url 'boardgame_add' %}" class="btn btn-primary">Add boardgame</a>
-    </div>
+    {% if user.is_superuser %}
+        <div class="text-center mb-4">
+            <a href="{% url 'boardgame_add' %}" class="btn btn-primary">Add boardgame</a>
+        </div>
+    {% endif %}
 
     <div class="row">
         {% for boardgame in object_list %}
@@ -59,8 +61,10 @@
                         <div class="mt-auto">
                             <div class="d-flex justify-content-start gap-2">
                                 <a href="{% url 'boardgame_details' boardgame.pk %}" class="btn btn-primary">Details</a>
+                                {% if user.is_superuser %}
                                 <a href="{% url 'boardgame_update' boardgame.pk %}" class="btn btn-secondary">Edit</a>
                                 <a href="{% url 'boardgame_delete' boardgame.pk %}" class="btn btn-danger">Delete</a>
+                                {% endif %}
                                 <a href="{% url 'add_boardgame_to_cart' boardgame.pk %}" class="btn btn-success ml-auto">Add to Cart</a>
                             </div>
                         </div>
