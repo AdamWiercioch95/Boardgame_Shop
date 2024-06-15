@@ -1,0 +1,16 @@
+{% extends "top_header.html" %}
+{% block content %}
+<div class="container">
+    <h2>{{ title }}</h2>
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Review for {{ review.boardgame.name }}</h3>
+            <p><strong>Rating:</strong> {{ review.rating }}</p>
+            <p><strong>Comment:</strong> {{ review.comment }}</p>
+            <p><strong>User:</strong> {{ review.user.username }}</p>
+            <p><strong>Date:</strong> {{ review.created }}</p>
+            <a href="{% url 'boardgame_details' review.boardgame.pk %}" class="btn btn-primary">Back to Boardgame</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

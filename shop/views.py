@@ -17,14 +17,11 @@ class BoardgameDetailView(DetailView):
     model = Boardgame
     template_name = "shop/boardgame_details.html"
 
-    # def is_reviewed(self):
-    #     return Review.objects.filter(user=self.request.user, boardgame=self.object.boardgame).exists()
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # if self.is_reviewed:
-        #     context['is_reviewed'] = True
+        review = Review.objects.get(user=self.request.user, boardgame=self.get_object())
         boardgame = self.get_object()
+        context["review"] = review
         context['is_reviewed'] = Review.objects.filter(user=self.request.user, boardgame=boardgame).exists()
         return context
 
@@ -169,3 +166,14 @@ class ReviewAddView(LoginRequiredMixin, CreateView):
 
     def test_func(self):
         return self.request.user.is_authenticated
+
+
+class ReviewDitailView(LoginRequiredMixin, DetailView):
+    model = Review
+    template_name = 'shop/review_detail.html'
+    context_object_name = 'review'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Review Detail'
+        return context
