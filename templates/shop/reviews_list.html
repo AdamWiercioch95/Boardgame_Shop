@@ -1,0 +1,31 @@
+{% extends "top_header.html" %}
+{% block content %}
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">All Reviews</h2>
+        <div class="container mb-4">
+            <a href="{% url 'boardgame_details' boardgame.pk %}" class="btn btn-primary">Back To Boardgame</a>
+        </div>
+        <div class="row">
+            {% for review in object_list %}
+                <div class="col-md-12 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Rating: {{ review.get_rating_display }}</h5>
+                            <p class="card-text">{{ review.comment }}</p>
+                            <p class="card-text"><small class="text-muted">Reviewed by {{ review.user.username }} on {{ review.created|date:"F j, Y" }}</small></p>
+{#                            <div class="d-flex justify-content-between">#}
+
+{#                                {% if review.user == user or user.is_superuser %}#}
+{#                                    <div class="btn-group">#}
+{#                                        <a href="{% url 'review_update' review.pk %}" class="btn btn-secondary">Edit</a>#}
+{#                                        <a href="{% url 'review_delete' review.pk %}" class="btn btn-danger">Delete</a>#}
+{#                                    </div>#}
+{#                                {% endif %}#}
+{#                            </div>#}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

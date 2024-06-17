@@ -9,7 +9,13 @@
             <p><strong>Comment:</strong> {{ review.comment }}</p>
             <p><strong>User:</strong> {{ review.user.username }}</p>
             <p><strong>Date:</strong> {{ review.created }}</p>
-            <a href="{% url 'boardgame_details' review.boardgame.pk %}" class="btn btn-primary">Back to Boardgame</a>
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'boardgame_details' review.boardgame.pk %}" class="btn btn-primary">Back to Boardgame</a>
+                <div>
+                    <a href="{% url 'review_update' review.pk %}" class="btn btn-secondary">Update Review</a>
+                    <a href="{% url 'review_delete' review.pk %}" class="btn btn-danger mr-2">Delete Review</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

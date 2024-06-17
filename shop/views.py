@@ -12,6 +12,13 @@ class BoardgameListView(ListView):
     model = Boardgame
     template_name = "shop/boardgames_list.html"
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(name__icontains=query)
+        return queryset
+
 
 class BoardgameDetailView(DetailView):
     model = Boardgame
@@ -19,10 +26,15 @@ class BoardgameDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        review = Review.objects.get(user=self.request.user, boardgame=self.get_object())
         boardgame = self.get_object()
-        context["review"] = review
-        context['is_reviewed'] = Review.objects.filter(user=self.request.user, boardgame=boardgame).exists()
+        if self.request.user.is_authenticated:
+            user_review = Review.objects.filter(user=self.request.user, boardgame=boardgame).first()
+            context['is_reviewed'] = user_review is not None
+            if user_review:
+                context["review"] = user_review
+        else:
+            context["is_reviewed"] = False
+
         return context
 
 
@@ -46,9 +58,6 @@ class BoardgameUpdateView(UserPassesTestMixin, UpdateView):
     fields = '__all__'
     template_name = "shop/form.html"
     success_url = reverse_lazy('boardgames_list')
-
-    # def get_success_url(self):
-    #     return reverse('boardgame_update', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -176,4 +185,53 @@ class ReviewDitailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Review Detail'
+        return context
+
+
+class ReviewUpdateView(LoginRequiredMixin, UpdateView):
+    model = Review
+    fields = ['rating', 'comment']
+    template_name = 'shop/form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Update Review'
+        return context
+
+    def get_success_url(self):
+        boardgame_pk = self.get_object().boardgame.pk
+        return reverse_lazy('boardgame_details', kwargs={'pk': boardgame_pk})
+
+    def test_func(self):
+        return self.request.user.is_authenticated
+
+
+class ReviewDeleteView(LoginRequiredMixin, DeleteView):
+    model = Review
+    template_name = 'shop/review_confirm_delete.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Review Delete'
+        return context
+
+    def get_success_url(self):
+        boardgame_pk = self.get_object().boardgame.pk
+        return reverse_lazy('boardgame_details', kwargs={'pk': boardgame_pk})
+
+    def test_func(self):
+        return self.request.user.is_authenticated
+
+
+class ReviewsListView(ListView):
+    model = Review
+    template_name = 'shop/reviews_list.html'
+
+    def get_queryset(self):
+        boardgame_pk = self.kwargs['boardgame_pk']
+        return Review.objects.filter(boardgame_id=boardgame_pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['boardgame'] = Boardgame.objects.get(pk=self.kwargs['boardgame_pk'])
         return context

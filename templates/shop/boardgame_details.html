@@ -52,13 +52,12 @@
                 </div>
                 <br>
                 <div class="d-flex justify-content-between">
+                        <a href="{% url 'reviews_list' boardgame.pk %}" class="btn btn-primary mr-1">All Reviews</a>
                     {% if not is_reviewed %}
-                        <a href="{% url 'review_add' boardgame.pk %}" class="btn btn-primary mr-auto">Add Review</a>
+                        <a href="{% url 'review_add' boardgame.pk %}" class="btn btn-primary">Add Review</a>
                     {% else %}
                         <div>
-                            <a href="{% url 'review_detail' review.pk %}" class="btn btn-secondary mr-auto">Show Review</a>
-                            <a href="#" class="btn btn-secondary mr-auto">Update Review</a>
-                            <a href="#" class="btn btn-danger mr-auto">Delete Review</a>
+                            <a href="{% url 'review_detail' review.pk %}" class="btn btn-secondary">Your Review</a>
                         </div>
                     {% endif %}
                     <a href="{% url 'add_boardgame_to_cart' boardgame.pk %}" class="btn btn-success ml-auto">Add to Cart</a>

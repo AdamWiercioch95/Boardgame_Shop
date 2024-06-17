@@ -18,4 +18,7 @@ urlpatterns = [
     path('order_detail/<int:pk>', views.OrderDetailView.as_view(), name='order_detail'),
     path('review_add/<int:boardgame_pk>/', views.ReviewAddView.as_view(), name='review_add'),
     path('review_detail/<int:pk>/', views.ReviewDitailView.as_view(), name='review_detail'),
+    path('review_update/<int:pk>/', views.ReviewUpdateView.as_view(), name='review_update'),
+    path('review_delete/<int:pk>/', views.ReviewDeleteView.as_view(), name='review_delete'),
+    path('reviews_list/<int:boardgame_pk>/', views.ReviewsListView.as_view(), name='reviews_list'),
 ]
