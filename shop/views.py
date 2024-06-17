@@ -1,11 +1,25 @@
+import random
+
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.db import IntegrityError
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
 from shop.models import Boardgame, Cart, CartBoardgame, Order, OrderBoardgame, Review
+
+
+class LandingPageView(TemplateView):
+    template_name = 'landing_page.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_boardgames = Boardgame.objects.all()
+        shuffled_boardgames = list(all_boardgames)
+        random.shuffle(shuffled_boardgames)
+        context['carousel_boardgames'] = shuffled_boardgames[:3]
+        return context
 
 
 class BoardgameListView(ListView):

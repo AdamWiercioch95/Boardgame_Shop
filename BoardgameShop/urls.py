@@ -16,13 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
-
+from shop.views import LandingPageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='landing_page.html'), name='landing_page'),
-    # j.w. zakładka 'kontakt' oraz 'o stronie'
+    path('', LandingPageView.as_view(), name='landing_page'),
     path('accounts/', include('accounts.urls')),
     path('shop/', include('shop.urls')),
 ]
