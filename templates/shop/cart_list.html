@@ -62,11 +62,18 @@
     </table>
     <p class="text-center">Total: {{ cart.total }}</p>
 
-    <form action="{% url 'make_order' %}" method="post" class="text-center">
-        {% csrf_token %}
-        <input type="hidden" name="action" value="submit_order">
-        <button type="submit" class="btn btn-primary">Make order</button>
-    </form>
+    <div class="container justify-content-center col-md-2">
+        <a href="{% url 'boardgames_list' %}" class="btn btn-secondary btn-block">Continue Shopping</a>
+    </div>
+        
+    <div class="container justify-content-center col-md-2">
+        <form action="{% url 'make_order' %}" method="post" class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="submit_order">
+            <button type="submit" class="btn btn-primary btn-block">Make Order</button>
+        </form>
+    </div>
+
 </div>
 
 {% endblock %}

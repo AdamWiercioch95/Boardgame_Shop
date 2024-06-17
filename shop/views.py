@@ -114,7 +114,7 @@ class AddBoardgameToCartView(LoginRequiredMixin, View):
         except CartBoardgame.DoesNotExist:
             cart.boardgames.add(boardgame)
 
-        return redirect('boardgames_list')
+        return redirect('cart_list')
 
 
 class DeleteBoardgameFromCartView(LoginRequiredMixin, View):
