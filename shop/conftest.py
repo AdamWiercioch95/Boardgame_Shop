@@ -1,7 +1,7 @@
 import pytest
 
 from accounts.models import CustomUser
-from shop.models import Boardgame, Category, Publisher, Review
+from shop.models import Boardgame, Category, Publisher, Review, Cart, Order, CartBoardgame, OrderBoardgame
 
 
 @pytest.fixture
@@ -56,3 +56,24 @@ def review(user, boardgame):
         comment='testComment'
     )
     return review
+
+
+@pytest.fixture
+def cart(user):
+    return Cart.objects.create(user=user)
+
+
+@pytest.fixture
+def order(user):
+    return Order.objects.create(user=user)
+
+
+# @pytest.fixture
+# def cart_boardgame(cart, boardgame):
+#     return CartBoardgame.objects.create(cart=cart, boardgame=boardgame)
+
+
+@pytest.fixture
+def order_boardgame(order, boardgame):
+    return OrderBoardgame.objects.create(order=order, boardgame=boardgame)
+
