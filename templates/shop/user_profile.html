@@ -1,0 +1,69 @@
+{% extends "top_header.html" %}
+{% block content %}
+<div class="container" style="width: 40%">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title text-center">Your Profile</h2>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-3">Field</th>
+                            <th class="text-center col-3">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center"><strong>Username</strong></td>
+                            <td class="text-center">{{ request.user.username }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><strong>Email</strong></td>
+                            <td class="text-center">{{ request.user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><strong>Phone Number</strong></td>
+                            {% if request.user.phone_number %}
+                                <td class="text-center">{{ request.user.phone_number }}</td>
+                            {% else %}
+                                <td class="text-center">Not provided</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td class="text-center"><strong>First Name</strong></td>
+                            {% if request.user.phone_number %}
+                                <td class="text-center">{{ request.user.first_name }}</td>
+                            {% else %}
+                                <td class="text-center">Not provided</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td class="text-center"><strong>Last Name</strong></td>
+                            {% if request.user.phone_number %}
+                                <td class="text-center">{{ request.user.last_name }}</td>
+                            {% else %}
+                                <td class="text-center">Not provided</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td class="text-center"><strong>Address</strong></td>
+                            {% if request.user.address %}
+                                <td class="text-center">{{ request.user.address }}</td>
+                            {% else %}
+                                <td class="text-center">Not provided</td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a href="{% url 'profile_edit' %}" class="btn btn-primary mr-1">Edit Profile</a>
+                <a href="{% url 'logout' %}" class="btn btn-danger ml-auto">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

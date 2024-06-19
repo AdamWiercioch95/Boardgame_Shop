@@ -7,7 +7,9 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
+from accounts.models import CustomUser
 from shop.models import Boardgame, Cart, CartBoardgame, Order, OrderBoardgame, Review
+from templates.shop.forms import CustomUserForm
 
 
 class LandingPageView(TemplateView):
@@ -248,4 +250,24 @@ class ReviewsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['boardgame'] = Boardgame.objects.get(pk=self.kwargs['boardgame_pk'])
+        return context
+
+
+class UserProfileView(LoginRequiredMixin, TemplateView):
+    model = CustomUser
+    template_name = 'shop/user_profile.html'
+
+
+class EditProfileView(LoginRequiredMixin, UpdateView):
+    model = CustomUser
+    form_class = CustomUserForm
+    template_name = 'shop/form.html'
+    success_url = reverse_lazy('profile_view')
+
+    def get_object(self):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Edit Profile'
         return context

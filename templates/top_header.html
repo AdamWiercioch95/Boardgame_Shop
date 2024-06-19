@@ -48,7 +48,7 @@
                     {% endif %}
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">{{ user }}</a>
+                        <a class="nav-link" href="{% url 'profile_view' %}">{{ user }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>

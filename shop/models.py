@@ -20,13 +20,15 @@ class Boardgame(models.Model):
         verbose_name='Max. Game Time')
     categories = models.ManyToManyField('Category', verbose_name='Categories')
     publisher = models.ForeignKey('Publisher', on_delete=models.CASCADE, verbose_name='Publisher')
-    # review =
 
     class Meta:
         ordering = ['name']
 
     def avg_rating(self):
-        return self.review_set.aggregate(Avg('rating'))['rating__avg'] or 0.0
+        avg_rating = self.review_set.aggregate(Avg('rating'))['rating__avg']
+        if avg_rating is not None:
+            return round(avg_rating, 2)
+        return "No Review Added"
 
     def __str__(self):
         return self.name
