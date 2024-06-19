@@ -68,11 +68,6 @@ def order(user):
     return Order.objects.create(user=user)
 
 
-# @pytest.fixture
-# def cart_boardgame(cart, boardgame):
-#     return CartBoardgame.objects.create(cart=cart, boardgame=boardgame)
-
-
 @pytest.fixture
 def order_boardgame(order, boardgame):
     return OrderBoardgame.objects.create(order=order, boardgame=boardgame)

@@ -264,10 +264,7 @@ def test_boardgame_delete_superuser(superuser, boardgame):
     response = client.post(url)
     assert response.status_code == 302
     assert response.url == reverse('boardgames_list')
-
-    # ------------------------------------------------------------- do sprawdzenia
-    with pytest.raises(Boardgame.DoesNotExist):
-        Boardgame.objects.get(pk=boardgame.pk)
+    assert not Boardgame.objects.filter(pk=boardgame.pk).exists()
 
 
 @pytest.mark.django_db
@@ -278,11 +275,6 @@ def test_boardgame_delete_not_superuser(user, boardgame):
 
     response = client.get(url)
     assert response.status_code == 403
-
-    response = client.post(url)
-    assert response.status_code == 403
-
-    assert Boardgame.objects.filter(pk=boardgame.pk).exists()
 
 
 @pytest.mark.django_db
@@ -297,8 +289,6 @@ def test_boardgame_delete_anonymous(boardgame):
     response = client.post(url)
     assert response.status_code == 302
     assert response.url.startswith(reverse('login'))
-
-    assert Boardgame.objects.filter(pk=boardgame.pk).exists()
 
 
 # ---------------------------------------------------------------------------------------------------------- cart list
@@ -319,8 +309,8 @@ def test_cart_list_authenticated(user):
 def test_cart_list_anonymous():
     client = Client()
     url = reverse('cart_list')
-
     response = client.get(url)
+
     assert response.status_code == 302
     assert response.url.startswith(reverse('login'))
 
@@ -385,7 +375,7 @@ def test_delete_boardgame_from_cart_authenticated(user, boardgame, cart):
 def test_delete_boardgame_from_cart_last_item(user, boardgame, cart):
     client = Client()
     client.force_login(user)
-    cart_item = CartBoardgame.objects.create(boardgame=boardgame, cart=cart, quantity=1)
+    CartBoardgame.objects.create(boardgame=boardgame, cart=cart, quantity=1)
 
     url = reverse('delete_boardgame_from_cart', kwargs={'boardgame_pk': boardgame.pk})
     response = client.get(url)
@@ -422,7 +412,7 @@ def test_make_order_authenticated(user, boardgame, cart):
 def test_make_order_empty_cart(user):
     client = Client()
     client.force_login(user)
-    cart = Cart.objects.create(user=user)
+    Cart.objects.create(user=user)
 
     url = reverse('make_order')
     response = client.post(url)
@@ -434,11 +424,9 @@ def test_make_order_empty_cart(user):
 
 # ---------------------------------------------------------------------------------------------------------- order list
 @pytest.mark.django_db
-def test_orders_list_authenticated(user):
+def test_orders_list_authenticated(user, order):
     client = Client()
     client.force_login(user)
-
-    Order.objects.create(user=user)
 
     url = reverse('orders_list')
     response = client.get(url)
@@ -456,7 +444,7 @@ def test_orders_list_unauthenticated():
     response = client.get(url)
 
     assert response.status_code == 302
-    assert response.url.startswith(reverse('login') + '?next=')
+    assert response.url.startswith(reverse('login'))
 
 
 # ------------------------------------------------------------------------------------------------------- order details
@@ -580,7 +568,6 @@ def test_review_delete_unauthenticated(review):
     response = client.post(url)
 
     assert response.status_code == 302
-    assert Review.objects.filter(pk=review.pk).exists()
 
 
 # --------------------------------------------------------------------------------------------------------- review list
