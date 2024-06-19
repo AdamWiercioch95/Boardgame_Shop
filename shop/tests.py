@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from pytest_django.asserts import assertTemplateUsed
 
 from shop.models import Boardgame, Cart, CartBoardgame, Order, OrderBoardgame, Review
+from shop.forms import CustomUserForm
 
 
 # landing page
@@ -590,3 +591,76 @@ def test_reviews_list_no_reviews(client, boardgame):
     assert response.status_code == 200
     assert len(response.context['object_list']) == 0
     assert response.context['boardgame'] == boardgame
+
+
+# -------------------------------------------------------------------------------------------------------- user profile
+@pytest.mark.django_db
+def test_user_profile_authenticated(user):
+    client = Client()
+    client.force_login(user)
+    url = reverse('profile_view')
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert response.context['user'] == user
+
+
+@pytest.mark.django_db
+def test_user_profile_not_authenticated():
+    client = Client()
+    url = reverse('profile_view')
+    response = client.get(url)
+
+    assert response.status_code == 302
+    assert response.url == reverse('login') + '?next=' + url
+
+
+# --------------------------------------------------------------------------------------------------- user profile edit
+@pytest.mark.django_db
+def test_edit_profile_get_authenticated(user):
+    client = Client()
+    client.force_login(user)
+    url = reverse('profile_edit')
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert isinstance(response.context['form'], CustomUserForm)
+
+
+@pytest.mark.django_db
+def test_edit_profile_post_authenticated(user):
+    client = Client()
+    client.force_login(user)
+    url = reverse('profile_edit')
+    data = {
+        'first_name': 'TestFirstName',
+        'last_name': 'TestLastName',
+        'phone_number': '987654321',
+        'city': 'TestCity',
+        'street': 'TestStreet',
+        'street_number': '123',
+        'house_number': '12'
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 302
+    assert response.url == reverse('profile_view')
+
+    user.refresh_from_db()
+    assert user.first_name == 'TestFirstName'
+    assert user.last_name == 'TestLastName'
+    assert user.phone_number == '987654321'
+    assert user.address.city == 'TestCity'
+    assert user.address.street == 'TestStreet'
+    assert user.address.street_number == '123'
+    assert user.address.house_number == '12'
+
+
+@pytest.mark.django_db
+def test_edit_profile_not_authenticated():
+    client = Client()
+    url = reverse('profile_edit')
+    response = client.get(url)
+
+    assert response.status_code == 302
+    assert response.url == reverse('login') + '?next=' + url

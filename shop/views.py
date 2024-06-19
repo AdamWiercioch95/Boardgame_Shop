@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from accounts.models import CustomUser
 from shop.models import Boardgame, Cart, CartBoardgame, Order, OrderBoardgame, Review
-from templates.shop.forms import CustomUserForm
+from shop.forms import CustomUserForm
 
 
 class LandingPageView(TemplateView):
