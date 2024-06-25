@@ -62,7 +62,7 @@ def test_login_post_valid_data(user):
     }
     response = client.post(url, data)
     assert response.status_code == 302
-    assert response.url == reverse('landing_page')
+    assert response.url == reverse('boardgames_list')
 
 
 @pytest.mark.django_db
